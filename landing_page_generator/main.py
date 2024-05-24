@@ -12,6 +12,9 @@ from tools.file_tools import FileTools
 from tools.search_tools import SearchTools
 from tools.template_tools import TemplateTools
 
+from langchain.llms import Ollama
+ollama_openhermes = Ollama(model="agent")
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -115,6 +118,7 @@ class LandingPageCrew():
     self.idea_analyst = Agent(
       **idea_analyst_config,
       verbose=True,
+      llm=ollama_openhermes,
       tools=[
         SearchTools.search_internet,
         BrowserTools.scrape_and_summarize_website
@@ -124,6 +128,7 @@ class LandingPageCrew():
     self.communications_strategist = Agent(
       **strategist_config,
       verbose=True,
+      llm=ollama_openhermes,
       tools=[
           SearchTools.search_internet,
           BrowserTools.scrape_and_summarize_website,
@@ -133,6 +138,7 @@ class LandingPageCrew():
     self.react_developer = Agent(
       **developer_config,
       verbose=True,
+      llm=ollama_openhermes,
       tools=[
           SearchTools.search_internet,
           BrowserTools.scrape_and_summarize_website,
@@ -144,6 +150,7 @@ class LandingPageCrew():
 
     self.content_editor_agent = Agent(
       **editor_config,
+      llm=ollama_openhermes,
       tools=[
           SearchTools.search_internet,
           BrowserTools.scrape_and_summarize_website,
@@ -152,16 +159,7 @@ class LandingPageCrew():
 
 if __name__ == "__main__":
   print("Welcome to Idea Generator")
-  print(dedent("""
-  ! YOU MUST FORK THIS BEFORE USING IT !
-  """))
-
-  print(dedent("""
-      Disclaimer: This will use gpt-4 unless you changed it 
-      not to, and by doing so it will cost you money (~2-9 USD).
-      The full run might take around ~10-45m. Enjoy your time back.\n\n
-    """
-  ))
+  
   idea = input("# Describe what is your idea:\n\n")
   
   if not os.path.exists("./workdir"):
